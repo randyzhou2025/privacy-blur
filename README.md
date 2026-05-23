@@ -47,6 +47,7 @@ location ^~ /privacy-blur/ {
 
 ```text
 http://服务器IP:3030/ocr/worker.min.js
+http://服务器IP:3030/ocr/tesseract-core-relaxedsimd-lstm.wasm.js
 http://服务器IP:3030/ocr/tesseract-core-lstm.wasm.js
 http://服务器IP:3030/tessdata/chi_sim.traineddata.gz
 http://服务器IP:3030/tessdata/eng.traineddata.gz
@@ -56,6 +57,7 @@ http://服务器IP:3030/tessdata/eng.traineddata.gz
 
 ```text
 https://qiway.site/privacy-blur/ocr/worker.min.js
+https://qiway.site/privacy-blur/ocr/tesseract-core-relaxedsimd-lstm.wasm.js
 https://qiway.site/privacy-blur/ocr/tesseract-core-lstm.wasm.js
 https://qiway.site/privacy-blur/tessdata/chi_sim.traineddata.gz
 https://qiway.site/privacy-blur/tessdata/eng.traineddata.gz

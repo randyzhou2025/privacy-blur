@@ -6,6 +6,8 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 const copies = [
   ["node_modules/tesseract.js/dist/worker.min.js", "public/ocr/worker.min.js"],
+  ["node_modules/tesseract.js-core/tesseract-core-relaxedsimd-lstm.wasm.js", "public/ocr/tesseract-core-relaxedsimd-lstm.wasm.js"],
+  ["node_modules/tesseract.js-core/tesseract-core-relaxedsimd-lstm.wasm", "public/ocr/tesseract-core-relaxedsimd-lstm.wasm"],
   ["node_modules/tesseract.js-core/tesseract-core-lstm.wasm.js", "public/ocr/tesseract-core-lstm.wasm.js"],
   ["node_modules/tesseract.js-core/tesseract-core-lstm.wasm", "public/ocr/tesseract-core-lstm.wasm"],
   ["node_modules/tesseract.js-core/tesseract-core-simd-lstm.wasm.js", "public/ocr/tesseract-core-simd-lstm.wasm.js"],
