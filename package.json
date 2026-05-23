@@ -7,7 +7,8 @@
     "dev": "vite --host 0.0.0.0",
     "build": "tsc && vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "prepare:ocr": "node scripts/prepare-ocr-assets.mjs"
+    "prepare:ocr": "node scripts/prepare-ocr-assets.mjs",
+    "package:local": "node scripts/package-local.mjs"
   },
   "dependencies": {
     "@tesseract.js-data/chi_sim": "^1.0.0",
