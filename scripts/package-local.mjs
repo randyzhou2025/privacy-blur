@@ -55,7 +55,8 @@ function inlineAppEntry() {
   const js = readFileSync(resolve(packageDir, jsMatch[1]), "utf8");
   const inlined = html
     .replace(cssMatch[0], `<style>${css}</style>`)
-    .replace(jsMatch[0], `<script>${js}</script>`);
+    .replace(jsMatch[0], "")
+    .replace("</body>", `    <script>${js}</script>\n  </body>`);
 
   writeFileSync(htmlPath, inlined, "utf8");
   rmSync(resolve(packageDir, "assets"), { recursive: true, force: true });
