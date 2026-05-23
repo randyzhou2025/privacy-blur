@@ -326,7 +326,7 @@ function translateOcrStatus(status: string): string {
   const map: Record<string, string> = {
     "loading tesseract core": "正在加载本地 OCR 核心",
     "initializing tesseract": "正在初始化本地 OCR",
-    "loading language traineddata": "正在加载本地语言包",
+    "loading language traineddata": "正在加载本地语言包，首次会慢一些",
     "initializing api": "正在准备识别引擎",
     "recognizing text": "正在识别图片文字",
   };

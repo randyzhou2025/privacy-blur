@@ -92,6 +92,7 @@ app.innerHTML = `
             <span id="ocrPercent">0%</span>
           </div>
           <div class="progress-track"><div id="ocrBar"></div></div>
+          <p class="ocr-hint" id="ocrHint">首次自动查找会加载本地 OCR 语言包，图片仍只在你的浏览器里处理。</p>
         </div>
       </section>
 
@@ -149,6 +150,7 @@ const refs = {
   ocrStatus: query<HTMLElement>("#ocrStatus"),
   ocrPercent: query<HTMLElement>("#ocrPercent"),
   ocrBar: query<HTMLDivElement>("#ocrBar"),
+  ocrHint: query<HTMLElement>("#ocrHint"),
 };
 
 let boxes: MaskBox[] = [];
@@ -354,6 +356,23 @@ function setOcrProgress(message: string, progress: number): void {
   refs.ocrStatus.textContent = message;
   refs.ocrPercent.textContent = `${percent}%`;
   refs.ocrBar.style.width = `${percent}%`;
+  refs.ocrHint.textContent = getOcrProgressHint(message, progress);
+}
+
+function getOcrProgressHint(message: string, progress: number): string {
+  if (progress >= 1) {
+    return message.includes("失败") ? "自动识别只是辅助提醒；如果当前浏览器限制 OCR，可先手动框选后导出。" : "请检查候选框是否覆盖完整，导出前仍可手动调整。";
+  }
+
+  if (message.includes("语言包") || message.includes("OCR 核心") || message.includes("初始化")) {
+    return "首次会下载约 30MB 本地 OCR 资源，手机网络可能需要几十秒；图片不会上传服务器。";
+  }
+
+  if (message.includes("识别")) {
+    return "正在浏览器本地分析文字，候选只显示类型，不展示 OCR 原文。";
+  }
+
+  return "本地 OCR 会先加载识别资源，首次较慢，后续同一浏览器通常会更快。";
 }
 
 function escapeHtml(value: string): string {
