@@ -12,6 +12,55 @@ npm run dev
 
 打开 Vite 输出的本地地址后即可使用。
 
+## Docker 部署
+
+这个项目是纯前端静态应用，线上不需要启动后端服务。Docker 镜像会先构建前端，再用 Nginx 托管 `dist/`。
+
+本机或服务器直接运行：
+
+```bash
+docker compose up -d --build
+```
+
+默认访问：
+
+```text
+http://服务器IP:8080/
+```
+
+如果要挂到 `https://qiway.site/privacy-blur/`，可以让外层 Nginx 反代到容器：
+
+```nginx
+location = /privacy-blur {
+    return 301 /privacy-blur/;
+}
+
+location ^~ /privacy-blur/ {
+    proxy_pass http://127.0.0.1:8080/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+}
+```
+
+部署后建议检查这些资源是否能正常访问：
+
+```text
+http://服务器IP:8080/ocr/worker.min.js
+http://服务器IP:8080/ocr/tesseract-core.wasm.js
+http://服务器IP:8080/tessdata/chi_sim.traineddata.gz
+http://服务器IP:8080/tessdata/eng.traineddata.gz
+```
+
+如果挂在 `https://qiway.site/privacy-blur/`，对应检查：
+
+```text
+https://qiway.site/privacy-blur/ocr/worker.min.js
+https://qiway.site/privacy-blur/ocr/tesseract-core.wasm.js
+https://qiway.site/privacy-blur/tessdata/chi_sim.traineddata.gz
+https://qiway.site/privacy-blur/tessdata/eng.traineddata.gz
+```
+
 ## 设计开发准则
 
 用户体验优先是后续设计、开发、审查和测试的第一准则。每次改动都要从真实使用路径检查：选择图片后是否马上看到图片，常用操作是否就近出现，手机端是否顺手，是否容易误触，导出前是否清楚知道哪些区域会被写入新图片。

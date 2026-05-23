@@ -1,0 +1,8 @@
+services:
+  privacy-blur:
+    build: .
+    image: privacy-blur:latest
+    container_name: privacy-blur
+    restart: unless-stopped
+    ports:
+      - "8080:80"

@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.DS_Store
+*.log
+marketing
+public/ocr
+public/tessdata
+README.local
