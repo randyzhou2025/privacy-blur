@@ -25,7 +25,7 @@ docker compose up -d --build
 默认访问：
 
 ```text
-http://服务器IP:8080/
+http://服务器IP:3030/
 ```
 
 如果要挂到 `https://qiway.site/privacy-blur/`，可以让外层 Nginx 反代到容器：
@@ -36,7 +36,7 @@ location = /privacy-blur {
 }
 
 location ^~ /privacy-blur/ {
-    proxy_pass http://127.0.0.1:8080/;
+    proxy_pass http://127.0.0.1:3030/;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-Proto $scheme;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -46,10 +46,10 @@ location ^~ /privacy-blur/ {
 部署后建议检查这些资源是否能正常访问：
 
 ```text
-http://服务器IP:8080/ocr/worker.min.js
-http://服务器IP:8080/ocr/tesseract-core.wasm.js
-http://服务器IP:8080/tessdata/chi_sim.traineddata.gz
-http://服务器IP:8080/tessdata/eng.traineddata.gz
+http://服务器IP:3030/ocr/worker.min.js
+http://服务器IP:3030/ocr/tesseract-core.wasm.js
+http://服务器IP:3030/tessdata/chi_sim.traineddata.gz
+http://服务器IP:3030/tessdata/eng.traineddata.gz
 ```
 
 如果挂在 `https://qiway.site/privacy-blur/`，对应检查：
