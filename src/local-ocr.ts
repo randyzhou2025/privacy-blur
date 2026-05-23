@@ -85,7 +85,10 @@ async function ensureLocalOcrAssets(): Promise<void> {
 
   const requiredAssets = [
     getLocalAssetUrl("ocr/worker.min.js"),
-    getLocalAssetUrl("ocr/tesseract-core.wasm.js"),
+    getLocalAssetUrl("ocr/tesseract-core-lstm.wasm.js"),
+    getLocalAssetUrl("ocr/tesseract-core-lstm.wasm"),
+    getLocalAssetUrl("ocr/tesseract-core-simd-lstm.wasm.js"),
+    getLocalAssetUrl("ocr/tesseract-core-simd-lstm.wasm"),
     getLocalAssetUrl("tessdata/eng.traineddata.gz"),
     getLocalAssetUrl("tessdata/chi_sim.traineddata.gz"),
   ];

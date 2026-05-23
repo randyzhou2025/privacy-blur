@@ -21,7 +21,6 @@ function run(command, args, options = {}) {
   }
 }
 
-run("npm", ["run", "prepare:ocr"]);
 run("npm", ["run", "build"]);
 
 rmSync(packageDir, { recursive: true, force: true });
@@ -35,7 +34,7 @@ if (!existsSync(resolve(packageDir, "index.html"))) {
   throw new Error("Local package is missing index.html");
 }
 
-run("zip", ["-r", "privacyblur-local.zip", "privacyblur-local"], {
+run("zip", ["-r", "privacyblur-local.zip", "privacyblur-local", "-x", "*/.DS_Store"], {
   cwd: releaseDir,
 });
 

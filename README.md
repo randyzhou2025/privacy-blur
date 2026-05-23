@@ -47,7 +47,7 @@ location ^~ /privacy-blur/ {
 
 ```text
 http://服务器IP:3030/ocr/worker.min.js
-http://服务器IP:3030/ocr/tesseract-core.wasm.js
+http://服务器IP:3030/ocr/tesseract-core-lstm.wasm.js
 http://服务器IP:3030/tessdata/chi_sim.traineddata.gz
 http://服务器IP:3030/tessdata/eng.traineddata.gz
 ```
@@ -56,7 +56,7 @@ http://服务器IP:3030/tessdata/eng.traineddata.gz
 
 ```text
 https://qiway.site/privacy-blur/ocr/worker.min.js
-https://qiway.site/privacy-blur/ocr/tesseract-core.wasm.js
+https://qiway.site/privacy-blur/ocr/tesseract-core-lstm.wasm.js
 https://qiway.site/privacy-blur/tessdata/chi_sim.traineddata.gz
 https://qiway.site/privacy-blur/tessdata/eng.traineddata.gz
 ```
@@ -74,6 +74,8 @@ git@github.com:randyzhou2025/privacy-blur.git
 ```
 
 源代码、文档、配置、脚本和必要的本地运行资源需要提交；`node_modules`、构建产物、缓存和本机私有配置默认不提交。
+
+OCR worker、WASM 和语言包由 npm 依赖在本地或 Docker 构建阶段生成，不直接进入 Git，避免服务器拉取源码时下载大体积二进制文件。
 
 ## 本地离线包
 

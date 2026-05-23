@@ -4,3 +4,5 @@ dist
 *.log
 marketing/xiaohongshu_privacyblur/
 release/
+public/ocr/
+public/tessdata/
