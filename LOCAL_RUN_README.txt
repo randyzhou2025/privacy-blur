@@ -2,7 +2,9 @@ PrivacyBlur 本地版运行说明
 
 1. 解压 privacyblur-local.zip。
 2. 打开解压后的 PrivacyBlur 文件夹。
-3. 双击 index.html，用浏览器打开即可使用。
+3. 只需要手动打码时，可以先双击 index.html。
+4. 如果要使用“自动查找”本地 OCR：macOS 双击“Start-PrivacyBlur.command”；Windows 双击“Start-PrivacyBlur.bat”。
+5. 启动脚本会在本机启动一个临时本地服务，并自动打开浏览器。
 
 包内已经包含页面、脚本、样式、本地 OCR worker、WASM 和中英文 OCR 语言包，不需要 npm install，不需要连接服务器。
 
@@ -13,5 +15,5 @@ PrivacyBlur 本地版运行说明
 - 导出时会生成一张已经打码的新图片。
 
 设备说明：
-- PC 浏览器通常可直接解压并打开 index.html。
-- 手机浏览器和文件管理器对本地网页、OCR worker、WASM 的限制不完全一致。如果手机无法从本地文件夹直接运行 OCR，建议使用在线入口或添加到主屏幕；图片仍只在手机浏览器本地处理，不上传服务器。
+- Chrome/Safari 直接打开 file:// 下的 index.html 时，手动打码通常可用；但浏览器可能拦截 OCR worker 或 WASM，导致自动查找不可用，所以需要自动查找时请使用启动脚本。
+- 手机浏览器和文件管理器对本地网页、OCR worker、WASM 的限制更严格。如果手机无法从本地文件夹直接运行 OCR，建议使用在线入口或添加到主屏幕；图片仍只在手机浏览器本地处理，不上传服务器。
