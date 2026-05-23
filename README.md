@@ -26,6 +26,10 @@ git@github.com:randyzhou2025/privacy-blur.git
 
 源代码、文档、配置、脚本和必要的本地运行资源需要提交；`node_modules`、构建产物、缓存和本机私有配置默认不提交。
 
+## 本地离线包
+
+生产构建使用相对资源路径，便于把 `dist/` 打包成可下载的本地版。离线包需要包含 `dist/index.html`、`dist/assets/`、`dist/ocr/`、`dist/tessdata/` 和 `LOCAL_RUN_README.txt`。用户解压后可打开 `index.html` 使用；手机系统对本地网页、OCR worker 和 WASM 的限制不完全一致，如本地 OCR 被系统拦截，仍可使用在线入口，图片不会上传服务器。
+
 ## MVP 功能
 
 - 上传 PNG / JPG / WebP 图片并在本地 Canvas 预览。

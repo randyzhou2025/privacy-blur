@@ -33,19 +33,22 @@ let progressListener: ProgressCallback | null = null;
 
 export async function runLocalOcr(image: ImageBitmap, onProgress: ProgressCallback): Promise<MaskBox[]> {
   progressListener = onProgress;
-  await ensureLocalOcrAssets();
-
-  onProgress("正在优化图片文字", 0.08);
-  const { canvas, scale } = createOcrCanvas(image);
-  const worker = await getWorker();
-  onProgress("正在识别图片文字", 0.18);
 
   try {
+    await ensureLocalOcrAssets();
+
+    onProgress("正在优化图片文字", 0.08);
+    const { canvas, scale } = createOcrCanvas(image);
+    const worker = await getWorker();
+    onProgress("正在识别图片文字", 0.18);
+
     const result = await worker.recognize(canvas, {}, { text: true, blocks: true, tsv: true });
     const lines = extractLines(result.data as OcrPage);
     const boxes = dedupeMaskBoxes(lines.flatMap((line) => lineToMaskBoxes(line, scale, image.width, image.height)));
     onProgress(`本地 OCR 完成，发现 ${boxes.length} 个疑似区域`, 1);
     return boxes;
+  } catch (error) {
+    throw new Error(getOcrFailureMessage(error));
   } finally {
     progressListener = null;
   }
@@ -53,9 +56,9 @@ export async function runLocalOcr(image: ImageBitmap, onProgress: ProgressCallba
 
 async function getWorker(): Promise<TesseractWorker> {
   workerPromise ??= createWorker(["chi_sim", "eng"], OEM.LSTM_ONLY, {
-    workerPath: "/ocr/worker.min.js",
-    corePath: "/ocr",
-    langPath: "/tessdata",
+    workerPath: getLocalAssetUrl("ocr/worker.min.js"),
+    corePath: getLocalAssetDirectory("ocr"),
+    langPath: getLocalAssetDirectory("tessdata"),
     cacheMethod: "none",
     workerBlobURL: false,
     gzip: true,
@@ -78,7 +81,14 @@ async function getWorker(): Promise<TesseractWorker> {
 }
 
 async function ensureLocalOcrAssets(): Promise<void> {
-  const requiredAssets = ["/ocr/worker.min.js", "/ocr/tesseract-core.wasm.js", "/tessdata/eng.traineddata.gz", "/tessdata/chi_sim.traineddata.gz"];
+  if (window.location.protocol === "file:") return;
+
+  const requiredAssets = [
+    getLocalAssetUrl("ocr/worker.min.js"),
+    getLocalAssetUrl("ocr/tesseract-core.wasm.js"),
+    getLocalAssetUrl("tessdata/eng.traineddata.gz"),
+    getLocalAssetUrl("tessdata/chi_sim.traineddata.gz"),
+  ];
   const checks = await Promise.all(
     requiredAssets.map(async (asset) => {
       try {
@@ -93,6 +103,26 @@ async function ensureLocalOcrAssets(): Promise<void> {
   if (checks.some((ok) => !ok)) {
     throw new Error("本地 OCR 资源缺失，请先运行 npm run prepare:ocr");
   }
+}
+
+function getOcrFailureMessage(error: unknown): string {
+  if (window.location.protocol === "file:") {
+    return "当前手机或浏览器限制了本地 OCR 资源读取；可继续手动打码，或用在线入口，图片仍只在本机浏览器处理。";
+  }
+
+  return error instanceof Error ? error.message : "本地 OCR 运行失败";
+}
+
+function getLocalAssetUrl(path: string): string {
+  return new URL(path, getLocalAssetBaseUrl()).href;
+}
+
+function getLocalAssetDirectory(path: string): string {
+  return getLocalAssetUrl(path).replace(/\/$/, "");
+}
+
+function getLocalAssetBaseUrl(): URL {
+  return new URL(import.meta.env.BASE_URL, window.location.href);
 }
 
 function createOcrCanvas(image: ImageBitmap): { canvas: HTMLCanvasElement; scale: number } {
