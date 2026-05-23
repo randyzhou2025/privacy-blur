@@ -12,9 +12,9 @@ type OcrBbox = {
 };
 
 type OcrLine = {
-  text: string;
-  confidence: number;
-  bbox: OcrBbox;
+  text?: string | null;
+  confidence?: number | null;
+  bbox?: OcrBbox | null;
 };
 
 type OcrPage = {
@@ -152,8 +152,13 @@ function extractLines(page: OcrPage): OcrLine[] {
   for (const block of page.blocks ?? []) {
     for (const paragraph of block.paragraphs ?? []) {
       for (const line of paragraph.lines ?? []) {
-        if (line.text.trim() && isValidBbox(line.bbox)) {
-          lines.push(line);
+        const text = typeof line.text === "string" ? line.text.trim() : "";
+        if (text && isValidBbox(line.bbox)) {
+          lines.push({
+            text,
+            confidence: getOcrConfidence(line.confidence),
+            bbox: line.bbox,
+          });
         }
       }
     }
@@ -162,15 +167,19 @@ function extractLines(page: OcrPage): OcrLine[] {
 }
 
 function lineToMaskBoxes(line: OcrLine, scale: number, imageWidth: number, imageHeight: number): MaskBox[] {
-  const hits = detectPrivacyInText(line.text);
+  const text = typeof line.text === "string" ? line.text : "";
+  if (!text || !isValidBbox(line.bbox)) return [];
+
+  const hits = detectPrivacyInText(text);
   if (hits.length === 0) return [];
 
   const paddingX = 8 / scale;
   const paddingY = 6 / scale;
-  const x = clamp(line.bbox.x0 / scale - paddingX, 0, imageWidth);
-  const y = clamp(line.bbox.y0 / scale - paddingY, 0, imageHeight);
-  const width = clamp((line.bbox.x1 - line.bbox.x0) / scale + paddingX * 2, 0, imageWidth - x);
-  const height = clamp((line.bbox.y1 - line.bbox.y0) / scale + paddingY * 2, 0, imageHeight - y);
+  const bbox = line.bbox;
+  const x = clamp(bbox.x0 / scale - paddingX, 0, imageWidth);
+  const y = clamp(bbox.y0 / scale - paddingY, 0, imageHeight);
+  const width = clamp((bbox.x1 - bbox.x0) / scale + paddingX * 2, 0, imageWidth - x);
+  const height = clamp((bbox.y1 - bbox.y0) / scale + paddingY * 2, 0, imageHeight - y);
 
   if (width < 4 || height < 4) return [];
 
@@ -183,14 +192,19 @@ function lineToMaskBoxes(line: OcrLine, scale: number, imageWidth: number, image
       height,
       source: "ocr",
       label: hits.map((hit) => hit.label).join(" / "),
-      confidence: Math.round(line.confidence),
+      confidence: Math.round(getOcrConfidence(line.confidence)),
       risk: strongestRisk(hits),
     },
   ];
 }
 
-function isValidBbox(bbox: OcrBbox): boolean {
+function isValidBbox(bbox: OcrBbox | null | undefined): bbox is OcrBbox {
+  if (!bbox) return false;
   return Number.isFinite(bbox.x0) && Number.isFinite(bbox.y0) && Number.isFinite(bbox.x1) && Number.isFinite(bbox.y1) && bbox.x1 > bbox.x0 && bbox.y1 > bbox.y0;
+}
+
+function getOcrConfidence(confidence: number | null | undefined): number {
+  return Number.isFinite(confidence) ? Number(confidence) : 0;
 }
 
 function getOcrScale(image: ImageBitmap): number {
