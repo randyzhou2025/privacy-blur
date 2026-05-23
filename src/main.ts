@@ -361,7 +361,9 @@ function setOcrProgress(message: string, progress: number): void {
 
 function getOcrProgressHint(message: string, progress: number): string {
   if (progress >= 1) {
-    return message.includes("失败") ? "自动识别只是辅助提醒；如果当前浏览器限制 OCR，可先手动框选后导出。" : "请检查候选框是否覆盖完整，导出前仍可手动调整。";
+    return message.includes("限制") || message.includes("失败")
+      ? "下一步：可直接拖动画框手动打码；如需自动查找，请用本地包里的 Start-PrivacyBlur 启动脚本，或打开在线入口。"
+      : "请检查候选框是否覆盖完整，导出前仍可手动调整。";
   }
 
   if (message.includes("语言包") || message.includes("OCR 核心") || message.includes("初始化")) {
