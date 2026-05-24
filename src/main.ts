@@ -69,7 +69,7 @@ app.innerHTML = `
           <div class="stage-tools">
             <button class="stage-scan-button" id="scanButton" type="button" disabled>
               <i data-lucide="scan-search"></i>
-              <span>自动查找</span>
+              <span>自动打码</span>
             </button>
             <div class="stage-mask-switch" role="tablist" aria-label="遮挡方式">
               <button class="segment is-active" data-mask-style="solid" type="button">
@@ -92,7 +92,7 @@ app.innerHTML = `
             <span id="ocrPercent">0%</span>
           </div>
           <div class="progress-track"><div id="ocrBar"></div></div>
-          <p class="ocr-hint" id="ocrHint">首次自动查找会加载本地 OCR 语言包，图片仍只在你的浏览器里处理。</p>
+          <p class="ocr-hint" id="ocrHint">首次自动打码会加载本地 OCR 语言包，图片仍只在你的浏览器里处理。</p>
         </div>
       </section>
 
@@ -362,7 +362,7 @@ function setOcrProgress(message: string, progress: number): void {
 function getOcrProgressHint(message: string, progress: number): string {
   if (progress >= 1) {
     return message.includes("限制") || message.includes("失败")
-      ? "下一步：可直接拖动画框手动打码；如需自动查找，请用本地包里的 Start-PrivacyBlur 启动脚本，或打开在线入口。"
+      ? "下一步：可直接拖动画框手动打码；如需自动打码，请用本地包里的 Start-PrivacyBlur 启动脚本，或打开在线入口。"
       : "请检查候选框是否覆盖完整，导出前仍可手动调整。";
   }
 

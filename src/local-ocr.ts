@@ -112,7 +112,7 @@ async function ensureLocalOcrAssets(): Promise<void> {
 
 function getOcrFailureMessage(error: unknown): string {
   if (window.location.protocol === "file:") {
-    return "当前浏览器直接打开本地文件时限制了自动查找；请手动框选，或用 Start-PrivacyBlur 启动脚本后再试。";
+    return "当前浏览器直接打开本地文件时限制了自动打码；请手动框选，或用 Start-PrivacyBlur 启动脚本后再试。";
   }
 
   return error instanceof Error ? error.message : "本地 OCR 运行失败";

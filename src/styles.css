@@ -216,6 +216,7 @@ button {
 }
 
 .tool-button:hover:not(:disabled),
+.stage-scan-button:hover:not(:disabled),
 .compact-button:hover:not(:disabled),
 .segment:hover,
 .icon-button:hover {
@@ -262,19 +263,30 @@ button {
 }
 
 .stage-scan-button {
-  min-height: 34px;
-  padding: 0 12px;
-  border: 1px solid #b6d7d2;
-  background: #ffffff;
-  color: #0f766e;
-  font-size: 12px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid #0f766e;
+  background: #0f766e;
+  color: #ffffff;
+  font-size: 13px;
   font-weight: 800;
   white-space: nowrap;
+  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.2);
+}
+
+.stage-scan-button svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 2.4;
 }
 
 .stage-scan-button:disabled {
   cursor: not-allowed;
-  opacity: 0.56;
+  border-color: #cbd5e1;
+  background: #e2e8f0;
+  color: #64748b;
+  opacity: 0.86;
+  box-shadow: none;
 }
 
 .segmented,
@@ -668,15 +680,15 @@ canvas {
     display: grid;
     grid-column: 1 / -1;
     grid-row: 2;
-    grid-template-columns: minmax(110px, 0.82fr) minmax(164px, 1.18fr);
+    grid-template-columns: minmax(132px, 1fr) minmax(164px, 1fr);
     gap: 8px;
     width: 100%;
   }
 
   .stage-scan-button {
     width: 100%;
-    min-height: 36px;
-    padding: 0 10px;
+    min-height: 40px;
+    padding: 0 12px;
   }
 
   .stage-mask-switch {
